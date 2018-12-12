@@ -9,6 +9,7 @@ const {
     GraphQLID,
     GraphQLInt,
     GraphQLList,
+    GraphQLNonNull,
 } = graphql;
 
 const BookType = new GraphQLObjectType({
@@ -80,8 +81,8 @@ const Mutation = new GraphQLObjectType({
         addAuthor: {
             type: AuthorType,
             args: {
-                name: { type: GraphQLString },
-                age: { type: GraphQLInt },
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                age: { type: new GraphQLNonNull(GraphQLInt) },
             },
             resolve(parent, args) {
                 let author = new Models.Author({
@@ -91,12 +92,27 @@ const Mutation = new GraphQLObjectType({
                 return author.save();
             }
         },
+        // fix this - right now, all fields get updated regardless
+        updateAuthor: {
+            type: AuthorType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                name: { type: GraphQLString },
+                age: { type: GraphQLInt },
+            },
+            resolve(parent, args) {
+                return Models.Author.findByIdAndUpdate(
+                    args.id, 
+                    { name: args.name, age: args.age }, 
+                    { new: true })
+            }
+        },
         addBook: {
             type: BookType,
             args: {
-                name: { type: GraphQLString },
-                genre: { type: GraphQLString },
-                authorId: { type: GraphQLID },
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                genre: { type: new GraphQLNonNull(GraphQLString) },
+                authorId: { type: new GraphQLNonNull(GraphQLID) },
             },
             resolve(parent, args) {
                 let book = new Models.Book({
