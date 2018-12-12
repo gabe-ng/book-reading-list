@@ -20,7 +20,7 @@ app.use("/graphql", graphqlHTTP({
     graphiql: true,
 }));
 
-
+// set and run port
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
