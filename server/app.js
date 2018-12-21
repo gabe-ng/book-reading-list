@@ -10,7 +10,8 @@ app.use(cors());
 
 // connect to mlab database
 mongoose.connect(
-  "mongodb://gabe:test123@ds019678.mlab.com:19678/gql-playlist",
+  // your database here
+  "",
   { useNewUrlParser: true }
 );
 
